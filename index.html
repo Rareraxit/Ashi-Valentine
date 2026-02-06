@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Our Valentine Week ❤️ Love you Ashi ma</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #ff4b4b;
+    color: white;
+    text-align: center;
+}
+
+/* ===== watermark background ===== */
+#bgText {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bgLine {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 34px;
+    color: rgba(255,255,255,0.08);
+    transform: rotate(-30deg);
+}
+
+/* keep content above watermark */
+body *:not(#bgText) {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== lock screen ===== */
+#lock {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+input {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+}
+
+button {
+    padding: 12px 22px;
+    font-size: 18px;
+    border-radius: 20px;
+    border: none;
+    background: #ff0066;
+    color: white;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.effect {
+    font-size: 90px;
+    margin-top: 30px;
+    animation: beat 1s infinite alternate;
+}
+
+@keyframes beat {
+    from { transform: scale(1); }
+    to { transform: scale(1.25); }
+}
+
+#main {
+    display: none;
+    padding: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="bgText"></div>
+
+<div id="lock">
+<h1>Private Love Space 🔒❤️</h1>
+<input type="password" id="pass" placeholder="Enter password">
+<button onclick="unlock()">Enter</button>
+</div>
+
+<div id="main">
+<h1 id="title"></h1>
+<div id="content"></div>
+<div id="nav"></div>
+</div>
+
+<script>
+
+/* ===== password ===== */
+function unlock(){
+    if(document.getElementById("pass").value === "AshiRakshi2412"){
+        document.getElementById("lock").style.display="none";
+        document.getElementById("main").style.display="block";
+        loadToday();
+    } else {
+        alert("Wrong password 💔");
+    }
+}
+
+/* ===== messages ===== */
+const surprises = {
+7:  {title:"Rose Day 🌹", emoji:"🌹", msg:"When I see you now, I still feel butterflies like the first day. No matter how many times I look at you, my heart reacts the same way. You are the calm in my chaos and the excitement in my ordinary days. Loving you feels natural, like breathing."},
+8:  {title:"Propose Day 💍", emoji:"💍", msg:"12 Oct — The best decision of my life was choosing you. Standing next to you makes me feel safe, understood, and complete. You are not just my love, you are my home. Every future dream I see has you in it."},
+9:  {title:"Chocolate Day 🍫", emoji:"🍫", msg:"Life became sweeter after you entered it. Even my bad days feel lighter because you exist in them. Your smile fixes things you don’t even know are broken. You are my everyday happiness."},
+10: {title:"Teddy Day 🧸", emoji:"🧸", msg:"Sometimes I irritate you, sometimes I act childish, and I know I’m not perfect. I have flaws and mistakes. But you still stay. You tolerate me with patience and love. That means more than words can ever say."},
+11: {title:"Promise Day 🤞", emoji:"🤞", msg:"I promise I’ll keep trying to be better for you. Not perfect — just better. I promise to protect your heart the way you protect mine. Whatever life brings, I want to face it with you beside me."},
+12: {title:"Hug Day 🤗", emoji:"🤗", msg:"When you’re next to me, I feel safe in a way I never knew before. Your presence alone calms me. A hug from you feels like the world pauses for a second. That peace is priceless."},
+13: {title:"Kiss Day 💋", emoji:"💋", msg:"Our first kiss wasn’t just a moment — it became a memory I replay in my heart. With you, even silence feels meaningful. Every little moment becomes special because it’s with you."},
+14: {title:"Valentine’s Day ❤️", emoji:"❤️", msg:"I don’t need a perfect love story. I just need ours. Imperfect, real, emotional, and growing every day. You are my today, my comfort, my future, and my forever. And I would choose you again in every lifetime."}
+};
+
+let currentDay = 7;
+
+/* ===== load today ===== */
+function loadToday(){
+    const t = new Date();
+    const d = t.getDate();
+    const m = t.getMonth() + 1;
+
+    if(m === 2 && d >= 7 && d <= 14){
+        currentDay = d;
+        showDay(currentDay);
+    } else {
+        document.getElementById("title").innerText =
+        "Come next day for surprise Ashi ma ❤️";
+    }
+}
+
+/* ===== show day ===== */
+function showDay(day){
+    const today = new Date();
+    const realDay = today.getDate();
+
+    document.getElementById("content").innerHTML = "";
+    document.getElementById("nav").innerHTML = "";
+
+    if(day > realDay){
+        document.getElementById("title").innerText =
+        "My Love visit next day for beautiful surprise ❤️";
+        return;
+    }
+
+    const s = surprises[day];
+    document.getElementById("title").innerText = s.title;
+
+    const btn = document.createElement("button");
+    btn.innerText = "Tap for Surprise";
+    btn.onclick = ()=>{
+        document.getElementById("content").innerHTML =
+        `<div class="effect">${s.emoji}</div>
+         <p>${s.msg}</p>`;
+    };
+
+    document.getElementById("content").appendChild(btn);
+
+    if(day > 7){
+        const back = document.createElement("button");
+        back.innerText = "⬅ Previous";
+        back.onclick = ()=>{
+            currentDay--;
+            showDay(currentDay);
+        };
+        document.getElementById("nav").appendChild(back);
+    }
+
+    if(day < 14){
+        const next = document.createElement("button");
+        next.innerText = "Next ➡";
+        next.onclick = ()=>{
+            currentDay++;
+            showDay(currentDay);
+        };
+        document.getElementById("nav").appendChild(next);
+    }
+}
+
+/* ===== watermark engine ===== */
+const message = "Ashi ma I Love you Rakshi Ma ❤️   ";
+const container = document.getElementById("bgText");
+
+for(let y = -500; y < window.innerHeight + 500; y += 80){
+    const line = document.createElement("div");
+    line.className = "bgLine";
+    line.style.top = y + "px";
+    line.style.left = "-500px";
+
+    let row = "";
+    for(let i=0;i<20;i++){
+        row += message;
+    }
+
+    line.innerText = row;
+    container.appendChild(line);
+}
+
+</script>
+
+</body>
+</html>
